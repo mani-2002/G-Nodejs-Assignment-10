@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make New Payment</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h1{
+            font-size: 8vh;
+        }
+        .total{
+            border: 1px solid black;
+            padding: 5vh;
+            margin-top: 20vh;
+            background-color:rgb(221, 175, 114);
+        }
+        .middle{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        button{
+            width: 30vh;
+            cursor: pointer;
+            margin: 1vh;
+            padding: 1vh;
+            border: 1px solid black;
+            border-radius: 5px;
+            background-color:rgb(46, 142, 226);
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Styles for the payment popup */
+        .paymentPopup {
+            display: none;
+            align-items: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: lightblue;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        /* Close button styles */
+        .closePopup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .paymentPopupInForm{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="total">
+        <div class="head">
+            <h1>Make New Payment</h1>
+        </div>
+        <div class="middle">
+            <button id="toBankAccount" onclick="openPopup('toBank')">To Bank Account</button>
+            <button id="toMobileNumber" onclick="openPopup('toMobile')">To Mobile Number</button>
+            <button id="toUpiId" onclick="openPopup('toUpi')">To UPI id</button>
+            <button id="backToDashboard">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Dark overlay -->
+    <div id="overlay" onclick="closePopup()"></div>
+
+    <!-- Payment popup for Bank Account -->
+<div id="paymentAcPopupBank" class="paymentPopup">
+    <form class="paymentPopupInForm" id="paymentFormBank" onsubmit="makePayment(event, 'toBank')">
+        <input type="text" id="ifsc_code_bank" placeholder="Enter IFSC Code" required><br>
+        <input type="text" id="account_number_bank" placeholder="Enter Account Number" required><br>
+        <input type="text" id="customer_id_bank" placeholder="Enter Customer Id" required><br>
+        <input type="number" id="amount_bank" placeholder="Enter Amount" required><br>
+        <button type="submit">Pay</button>
+    </form>
+</div>
+
+    <!-- Payment popup for Mobile Number -->
+<div id="paymentAcPopupMobile" class="paymentPopup">
+    <form class="paymentPopupInForm" id="paymentFormMobile" onsubmit="makePayment(event, 'toMobile')">
+        <input type="text" id="mobile_number" placeholder="Enter Mobile Number" required><br>
+        <input type="number" id="amount_mobile" placeholder="Enter Amount" required><br>
+        <button type="submit">Pay</button>
+    </form>
+</div>
+
+    <!-- Payment popup for UPI ID -->
+<div id="paymentAcPopupUpi" class="paymentPopup">
+    <form class="paymentPopupInForm" id="paymentFormUpi" onsubmit="makePayment(event, 'toUpi')">
+        <input type="text" id="upi_id" placeholder="Enter UPI ID" required><br>
+        <input type="number" id="amount_upi" placeholder="Enter Amount" required><br>
+        <button type="submit">Pay</button>
+    </form>
+</div>
+
+    <script>
+        document.getElementById('backToDashboard').addEventListener('click', function () {
+            window.location.href = '/admin/dashboard';
+            if (window.location.pathname === '/admin/makepayment') {
+                window.history.replaceState({}, document.title, '/admin/dashboard');
+            }
+        });
+
+        function openPopup(type) {
+            var popupId;
+            switch (type) {
+                case 'toBank':
+                    popupId = 'paymentAcPopupBank';
+                    break;
+                case 'toMobile':
+                    popupId = 'paymentAcPopupMobile';
+                    break;
+                case 'toUpi':
+                    popupId = 'paymentAcPopupUpi';
+                    break;
+                default:
+                    return;
+            }
+
+            document.getElementById(popupId).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('paymentAcPopupBank').style.display = 'none';
+            document.getElementById('paymentAcPopupMobile').style.display = 'none';
+            document.getElementById('paymentAcPopupUpi').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function makePayment(event, paymentType) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get the input values based on the payment type
+        let recipientDetails, amount;
+        switch (paymentType) {
+            case 'toBank':
+                recipientDetails = {
+                    ifsc_code: document.getElementById('ifsc_code_bank').value,
+                    account_number: document.getElementById('account_number_bank').value,
+                    customer_id: document.getElementById('customer_id_bank').value,
+                };
+                amount = parseFloat(document.getElementById('amount_bank').value);
+                break;
+
+            case 'toMobile':
+                recipientDetails = {
+                    mobile_number: document.getElementById('mobile_number').value,
+                };
+                amount = parseFloat(document.getElementById('amount_mobile').value);
+                break;
+
+            case 'toUpi':
+                recipientDetails = {
+                    upi_id: document.getElementById('upi_id').value,
+                };
+                amount = parseFloat(document.getElementById('amount_upi').value);
+                break;
+
+            default:
+                return;
+        }
+
+        // Validate input (you may want to perform more validation)
+        if (!isValidInput(recipientDetails) || isNaN(amount) || amount <= 0) {
+            alert('Please enter valid details.');
+            return;
+        }
+fetch('/admin/makepayment', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        paymentType: paymentType,
+        amount: amount,
+        ...recipientDetails,
+    }),
+})
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Payment failed: ' + data.error);
+                } else {
+                    alert('Payment successful!');
+                    // Reset the input fields
+                    resetInputFields(paymentType);
+                    // Close the popup or perform any other action after successful payment
+                    closePopup();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Payment failed. Please try again later.');
+            });
+    }
+
+function isValidInput(recipientDetails) {
+    for (const key in recipientDetails) {
+        if (!recipientDetails[key]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function resetInputFields(paymentType) {
+        switch (paymentType) {
+            case 'toBank':
+                document.getElementById('ifsc_code_bank').value = '';
+                document.getElementById('account_number_bank').value = '';
+                document.getElementById('customer_id_bank').value = '';
+                document.getElementById('amount_bank').value = '';
+                break;
+
+            case 'toMobile':
+                document.getElementById('mobile_number').value = '';
+                document.getElementById('amount_mobile').value = '';
+                break;
+
+            case 'toUpi':
+                document.getElementById('upi_id').value = '';
+                document.getElementById('amount_upi').value = '';
+                break;
+        }
+    }
+    </script>
+</body>
+</html>

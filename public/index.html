@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaymentApp</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <style>
+        .head{
+    color: red;
+    height: 20vh;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 10vh;
+    text-align: center;
+    padding-top: 15vh;
+}
+.middle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.loginBtns{
+    width: 25vh;
+    font-size: 3vh;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 2vh;
+    height: 8vh;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid black;
+}
+    </style>
+</head>
+<body>
+    <div class="head">
+        Welcome to Mani's Payment App
+    </div>
+    <div class="middle">
+        <button id="adminBtn" class="loginBtns">Login as Admin</button>
+        <button id="userBtn" class="loginBtns">Login as User</button>
+    </div>
+    <script>
+        document.getElementById("adminBtn").addEventListener("click", function () {
+            window.location.href = "./admin/login";
+        });
+        document.getElementById("userBtn").addEventListener('click',function(){
+            window.location.href = "/user/login"
+        });
+    </script>
+</body>
+</html>

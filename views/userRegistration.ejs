@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, private">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .head{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 8vh;
+    text-align: center;
+    color: red;
+    padding-top: 10vh;
+}
+.middle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5vh;
+}
+.userRegistrationFormDiv{
+    border: 2px solid black;
+    padding: 4vh;
+    border-radius: 5px;
+    background-color: turquoise;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.inputFields{
+    height: 3vh;
+    width: 34vh;
+    border: 2px solid black;
+    border-radius: 5px;
+}    
+.userRegistrationForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#userRegisterBtn{
+    background:none;
+    height: 5vh;
+    border: none;
+    border-radius: 5px;
+    width: 34vh;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+
+}
+.backToLoginBtn{
+    margin-top: 1vh;
+    background-color: black;
+    border: none;
+    color: white;
+    height: 4vh;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 20vh;
+}
+hr{
+    border-color: black;
+    width: 34vh;
+}
+</style>
+</head>
+<body>
+    <div class="head">
+        User Registration...
+    </div>
+    <div class="middle">
+        <div class="userRegistrationFormDiv">
+            <form class="userRegistrationForm" action="/user/register" method="POST">
+                <input type="text" name="fname" placeholder="Enter Full Name" class="inputFields" required><br>
+                <input type="tel" name="mobile_number" placeholder="Enter Mobile number" class="inputFields" required><br>
+                <input type="text" name="username" placeholder="Enter Username" class="inputFields" required><br>
+                <input type="password" name="password" placeholder="Enter Password" class="inputFields" required><br>
+                <input type="submit" id="userRegisterBtn" value="Register">
+              </form>
+              <hr>
+            <div><button class="backToLoginBtn" id="backToLogBtnId">Back to Login</button></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('backToLogBtnId').addEventListener('click',function(){
+            window.location.href = '/user/login';
+        });
+        document.getElementById('userRegisterBtn').addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the form from submitting immediately
+
+    // Fetch the form data and send it to the server using AJAX
+    fetch('/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(new FormData(document.querySelector('.userRegistrationForm'))),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Display an alert with the success or error message
+        alert(data.message);
+
+        // Optionally, you can redirect the user to another page after successful registration
+        if (data.message === 'User registered successfully') {
+          window.location.href = '/user/login'; // Replace with your desired success page
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  });
+    </script>
+</body>
+</html>

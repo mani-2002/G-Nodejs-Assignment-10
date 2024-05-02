@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= user.username%> Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+}
+.total{
+    display: flex;
+    flex-direction: row;
+}
+.left{
+    display: flex;
+    flex-direction: column;
+    width: 40vh;
+    padding: 2vh;
+    height: 96vh;
+    background-color: burlywood;
+}
+.userDashboardLeftBtns{
+    height: 14vh;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 1vh;
+    background-color: lightblue;
+    font-weight: bold;
+    font-size: 3vh;
+    font-family: 'Times New Roman', Times, serif;
+}
+.navBarTop{
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    background-color: rgb(138, 121, 121);
+    width: 80vw;
+}
+.navBarTopHead{
+    font-weight: bold;
+    font-size: 4.5vh;
+    padding-right: 25vw;
+    color: white;
+    padding-left: 5vh;
+}
+.navBtns{
+    width: 9vh;
+    height: 9vh;
+    border-radius: 50px;
+    cursor: pointer;
+}
+.navBtns1{
+    width: 6vh;
+    height: 6vh;
+}
+.userDashboardDetails{
+    border: 2px solid black;
+    width: 80vh;
+    margin-left: 5vh;
+    margin-top: 5vh;
+    padding: 5vh;
+    font-size: 5vh;
+    background-color:azure;
+}
+.popup {
+  display: none;
+  position: absolute;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 10px;
+  width: 15vh;
+}
+.popup.show {
+  display: block;
+}
+.adminLogoutBtn{
+    border: none;
+    background: none;
+    color: white;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+.userProfImg{
+    margin-top: 5vh;
+    margin-left: 5vh;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 30vh;
+    width: 30vh;
+}
+.userProfImgDiv{
+    width: 20vh;
+}
+</style>
+</head>
+<body>
+    <div class="total">
+        <div class="left">
+            <hr><button class="userDashboardLeftBtns" onclick="userMakePayment()">New Payment</button><hr>
+            <button class="userDashboardLeftBtns">Show Payments</button><hr>
+            <button class="userDashboardLeftBtns" onclick="userLogout()">Logout</button><hr>
+        </div>
+        <div class="right">
+            <div class="navBarTop">
+                <div class="navBarTopHead">
+                    Welcome <%= user.fullname%>...
+                </div>
+                <div>
+                    <button class="navBtns" id="walletBtn" onclick="toggleWalletPopup()"><img src="<%= walletImageUrl %>" class="navBtns1"></button>
+                    <button class="navBtns" id="notificationBtn" onclick="toggleNotificationPopup()"><img src="<%= notificationImageUrl %>" class="navBtns1"></button>
+                    <button class="navBtns" id="profileBtn" onclick="toggleProfilePopup()"><img src="<%= profileImageUrl %>" class="navBtns1"></button>
+                </div>
+            </div>
+            <div class="userProfImgDiv"><img src="/images/<%= randomImage %>" class="userProfImg"></div>
+            <div class="userDashboardDetails">
+                <p><b>Username:</b>  <%= user.username %></p>
+                <p><b>Account Number:</b>  <%= user.account_number %></p>
+                <p><b>Balance:</b>  ₹<%= user.balance %>/-</p>
+            </div> 
+        </div>
+    </div>
+    <div class="popup" id="walletPopup">
+        <p><b>Balance:</b> <br>₹<%= user.balance %>/-</p>
+    </div>
+    <div class="popup" id="notificationPopup">
+        <p><b>Balance:</b> <br>₹<%= user.balance %>/-</p>
+    </div>
+    <div class="popup" id="profilePopup">
+        <button class="adminLogoutBtn" onclick="userLogout()"><b>Logout</b></button>
+    </div>
+<script>
+window.addEventListener("popstate", function (event) {
+alert("Session timeout. Please log in again.");
+window.location.href = "/admin/login";
+});
+function toggleWalletPopup() {
+    var popup = document.getElementById('walletPopup');
+    var button = document.getElementById('walletBtn');
+
+    // Get the position of the button
+    var rect = button.getBoundingClientRect();
+
+    // Set the position of the popup near the button
+    popup.style.left = rect.left + 'px';
+    popup.style.top = rect.bottom + 'px';
+    popup.classList.toggle('show');
+
+    // Add an event listener to close the popup when clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!popup.contains(event.target) && !button.contains(event.target)) {
+            popup.classList.remove('show');
+        }
+    });
+}
+function toggleNotificationPopup() {
+    var popup = document.getElementById('notificationPopup');
+    var button = document.getElementById('notificationBtn');
+
+    // Get the position of the button
+    var rect = button.getBoundingClientRect();
+
+    // Set the position of the popup near the button
+    popup.style.left = rect.left + 'px';
+    popup.style.top = rect.bottom + 'px';
+    popup.classList.toggle('show');
+
+    // Add an event listener to close the popup when clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!popup.contains(event.target) && !button.contains(event.target)) {
+            popup.classList.remove('show');
+        }
+    });
+}
+function toggleProfilePopup() {
+    var popup = document.getElementById('profilePopup');
+    var button = document.getElementById('profileBtn');
+
+    // Get the position of the button
+    var rect = button.getBoundingClientRect();
+
+    // Set the position of the popup near the button
+    popup.style.left = rect.left + 'px';
+    popup.style.top = rect.bottom + 'px';
+    popup.classList.toggle('show');
+
+    // Add an event listener to close the popup when clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!popup.contains(event.target) && !button.contains(event.target)) {
+            popup.classList.remove('show');
+        }
+    });
+}
+function userLogout(){
+    window.location.href = '/user/login';
+    if (window.location.pathname === '/user/dashboard') {
+        window.history.replaceState({}, document.title, '/user/login');
+    }
+}
+function userMakePayment(){
+    window.location.href = '/user/makepayment';
+}
+</script>  
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, private">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .head{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 10vh;
+    text-align: center;
+    color: red;
+    padding-top: 10vh;
+}
+.middle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5vh;
+}
+.adminLoginField{
+    width: 34vh;
+    margin: 2vh;
+    height: 5vh;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+.submitBtn{
+    width: 10vh;
+    margin-left: 2.5vh;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 2vh;
+    width: 34vh;
+    cursor: pointer;
+}
+.authFormAdmin{
+    border: 2px solid black;
+    padding: 5vh;
+    border-radius: 10px;
+    background-color:turquoise;
+}
+    </style>
+</head>
+<body>
+    <div class="head">
+        Welcome Manikanta...
+    </div>
+    <div class="middle">
+<form action="/admin/login" method="post" class="authFormAdmin">
+    <input type="text" name="username" placeholder="Enter Username"  class="adminLoginField" required><br>
+    <input type="password" name="password" placeholder="Password" class="adminLoginField" required><br>
+    <button type="submit" class="submitBtn">Login</button>
+  </form>
+    </div>
+</body>
+</html>
